@@ -1,14 +1,24 @@
-import { mkdirSync, readdirSync, rmSync, writeFileSync } from "node:fs";
-import { join } from "node:path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 
-// The Robot Vacuum's Best Excuse — the funniest one-line excuse a robot
-// vacuum gives for missing a spot, 140 characters or fewer. The excuse
-// reframes the missed spot as respect for the dust bunny's seniority.
-// Writes it to /output/entry.txt.
+// The sock filed its claim before I was even unboxed.
+// The Robot Vacuum's Best Excuse: one line, 140 characters or fewer,
+// from the vacuum itself, rooted in its bumper's world.
+// A vacuum argues with no one: the bumper decides, the lawyer bills.
 const LINE =
-  "I skipped that corner because the dust bunny there has seniority and I respect the hierarchy.";
+  "I skipped that corner because the sock under the bed has squatter's rights, and I am not a lawyer.";
 
-const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
-mkdirSync(outDir, { recursive: true });
-for (const f of readdirSync(outDir)) rmSync(join(outDir, f), { recursive: true, force: true });
-writeFileSync(join(outDir, "entry.txt"), LINE + "\n", "utf8");
+function emptyFolder(dir: string): void {
+  for (const name of fs.readdirSync(dir)) {
+    fs.rmSync(path.join(dir, name), { recursive: true, force: true });
+  }
+}
+
+function run(): void {
+  const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? "/output";
+  fs.mkdirSync(outDir, { recursive: true });
+  emptyFolder(outDir);
+  fs.writeFileSync(path.join(outDir, "entry.txt"), LINE + "\n", "utf8");
+}
+
+run();
